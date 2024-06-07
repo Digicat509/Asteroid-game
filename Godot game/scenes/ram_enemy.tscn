@@ -1,0 +1,91 @@
+[gd_scene load_steps=7 format=3 uid="uid://drc6gin3hh1qm"]
+
+[ext_resource type="Texture2D" uid="uid://co63gq4ydrwh8" path="res://graphics/ram_ship.png" id="1_f5b3g"]
+[ext_resource type="PackedScene" uid="uid://c474xtmrb3qpp" path="res://scenes/hp_bar.tscn" id="3_l51ai"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ifx6o"]
+friction = 0.0
+bounce = 0.5
+
+[sub_resource type="GDScript" id="GDScript_cso1c"]
+script/source = "extends RigidBody2D
+
+signal distroyed(position, points)
+@export var SPEED = 120
+@export var MIN_HP = 10
+@export var MAX_HP = 50
+@export var MASS = 3500
+var HP
+var damage = 10
+var player
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	mass = MASS
+	HP = MAX_HP
+	$HPBar.max_value = HP
+	$HPBar.value = HP
+	rotation = randf_range(0, 2*PI)
+
+func target(t):
+	player = t
+	
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta):
+	rotation = player.global_position.angle_to_point(position)
+	rotation -= PI/2
+	if position.distance_to(player.position) < 600:
+		set_linear_velocity((Vector2.UP*SPEED).rotated(rotation))
+	else:
+		linear_velocity = Vector2.ZERO
+	$HPBar.value = HP
+	if HP <= 0:
+		queue_free()
+
+func _on_body_entered(body):
+	if body.is_in_group(\"lasers\"):
+		HP -= body.damage
+		body.queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n05l3"]
+size = Vector2(27, 55)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2c7h1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_f5b3g")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="RigidBody2D" type="RigidBody2D" groups=["enemys"]]
+collision_layer = 5
+collision_mask = 5
+physics_material_override = SubResource("PhysicsMaterial_ifx6o")
+gravity_scale = 0.0
+max_contacts_reported = 20
+contact_monitor = true
+script = SubResource("GDScript_cso1c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_n05l3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1, 0.914)
+sprite_frames = SubResource("SpriteFrames_2c7h1")
+
+[node name="HPBar" parent="." instance=ExtResource("3_l51ai")]
+offset_left = 24.0
+offset_top = -21.0
+offset_right = 101.0
+offset_bottom = 8.0
+rotation = 1.5708
+scale = Vector2(0.543349, 0.275531)
+metadata/_edit_use_anchors_ = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

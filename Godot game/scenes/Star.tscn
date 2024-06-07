@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://otjvhhn2qliw"]
+
+[ext_resource type="Texture2D" uid="uid://klgdrr4ecsds" path="res://graphics/Star.png" id="1_jm8oy"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2l0wa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_jm8oy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" groups=["stars"]]
+sprite_frames = SubResource("SpriteFrames_2l0wa")

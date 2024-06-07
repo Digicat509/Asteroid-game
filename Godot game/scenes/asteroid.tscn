@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://cpxoiuih4ema5"]
+
+[ext_resource type="Texture2D" uid="uid://db1ee0ex1a7kf" path="res://graphics/asteroid.png" id="1"]
+[ext_resource type="Script" path="res://scripts/asteroid.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://c474xtmrb3qpp" path="res://scenes/hp_bar.tscn" id="2_wmyuw"]
+
+[sub_resource type="PhysicsMaterial" id="3"]
+friction = 0.0
+
+[sub_resource type="SpriteFrames" id="1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="2"]
+radius = 22.7974
+height = 55.5866
+
+[node name="asteroid" type="RigidBody2D" groups=["asteroids", "enemys"]]
+collision_layer = 7
+collision_mask = 7
+mass = 1000.0
+physics_material_override = SubResource("3")
+gravity_scale = 0.0
+max_contacts_reported = 100
+contact_monitor = true
+script = ExtResource("2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("1")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+rotation = -0.886627
+shape = SubResource("2")
+
+[node name="HPBar" parent="." instance=ExtResource("2_wmyuw")]
+offset_top = -36.0
+offset_bottom = -30.0
+metadata/_edit_use_anchors_ = true
+
+[connection signal="body_entered" from="." to="." method="_on_asteroid_body_entered"]

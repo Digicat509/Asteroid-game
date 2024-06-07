@@ -1,0 +1,109 @@
+[gd_scene load_steps=7 format=3 uid="uid://gd88hgyd8c0a"]
+
+[ext_resource type="Texture2D" uid="uid://bx8bydk1eikde" path="res://graphics/enemy_ship.png" id="2_80i3r"]
+[ext_resource type="PackedScene" uid="uid://buuftkd8l2mih" path="res://scenes/laser.tscn" id="2_mfjfo"]
+[ext_resource type="PackedScene" uid="uid://c474xtmrb3qpp" path="res://scenes/hp_bar.tscn" id="3_buk0b"]
+
+[sub_resource type="GDScript" id="GDScript_bqj82"]
+script/source = "extends RigidBody2D
+
+signal distroyed(position, points)
+@export var laser_scene: PackedScene
+@export var SPEED = 100
+@export var MIN_HP = 10
+@export var MAX_HP = 40
+@export var MASS = 1200
+@export var range = 700
+var HP
+var damage = 10
+var player
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	HP = MAX_HP
+	$HPBar.max_value = HP
+	$HPBar.value = HP
+	$Timer.start()
+	mass = MASS
+	rotation = randf_range(0, 2*PI)
+
+func target(t):
+	player = t
+	
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta):
+	rotation = player.global_position.angle_to_point(position)
+	rotation -= PI/2
+	if position.distance_to(player.position) < range and position.distance_to(player.position) > 100:
+		set_linear_velocity((Vector2.UP*SPEED).rotated(rotation))
+	elif position.distance_to(player.position) < range:
+		set_linear_velocity((Vector2.UP*SPEED).rotated(rotation+PI/2)+(Vector2.UP*clamp(player.linear_velocity.length(), 0, SPEED)).rotated(player.rotation))
+	else:
+		linear_velocity = Vector2.ZERO
+	$HPBar.value = HP
+	if HP <= 0:
+		queue_free()
+
+func _on_body_entered(body):
+	if body.is_in_group('players'):
+		HP -= body.damage
+	if(body.is_in_group(\"asteroids\")):
+		HP -= body.damage
+	if body.is_in_group(\"lasers\"):
+		HP -= body.damage
+		body.queue_free()
+
+func _on_timer_timeout():
+	if position.distance_to(player.position) < range:
+		var laser = laser_scene.instantiate()
+		get_parent().add_child(laser)
+		laser.set_collision_layer_value(2, true)
+		laser.set_collision_mask_value(2, true)
+		laser.position = position - Vector2(0, 20).rotated(rotation)
+		laser.rotation = rotation
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n05l3"]
+size = Vector2(25, 25)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2c7h1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_80i3r")
+}],
+"loop": true,
+"name": &"Default",
+"speed": 5.0
+}]
+
+[node name="RigidBody2D" type="RigidBody2D" groups=["enemys"]]
+collision_layer = 5
+collision_mask = 5
+gravity_scale = 0.0
+max_contacts_reported = 20
+contact_monitor = true
+script = SubResource("GDScript_bqj82")
+laser_scene = ExtResource("2_mfjfo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_n05l3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.7, 0.64)
+sprite_frames = SubResource("SpriteFrames_2c7h1")
+animation = &"Default"
+
+[node name="HPBar" parent="." instance=ExtResource("3_buk0b")]
+offset_top = 17.0
+offset_right = 56.0
+offset_bottom = 46.0
+scale = Vector2(0.543349, 0.275531)
+metadata/_edit_use_anchors_ = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

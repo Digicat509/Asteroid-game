@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://been34to85e66"]
+
+[ext_resource type="Script" path="res://scripts/Background.gd" id="1_6m71q"]
+[ext_resource type="PackedScene" uid="uid://otjvhhn2qliw" path="res://scenes/Star.tscn" id="2_kpx41"]
+
+[node name="Node2D" type="CanvasLayer"]
+layer = 0
+script = ExtResource("1_6m71q")
+star_scene = ExtResource("2_kpx41")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -49987.0
+offset_top = -50243.0
+offset_right = 49373.0
+offset_bottom = 49117.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.027451, 0, 0.109804, 1)

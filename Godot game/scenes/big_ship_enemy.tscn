@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://b2qtkd6jwdhd6"]
+
+[ext_resource type="Script" path="res://scripts/big_ship_enemy.gd" id="1_84xpc"]
+[ext_resource type="Texture2D" uid="uid://b4fxdx5fpge64" path="res://graphics/icon.png" id="2_pfunk"]
+[ext_resource type="PackedScene" uid="uid://c474xtmrb3qpp" path="res://scenes/hp_bar.tscn" id="4_b7lck"]
+[ext_resource type="PackedScene" uid="uid://dtlssg4dl0he7" path="res://scenes/turret.tscn" id="6_5ujhp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n05l3"]
+size = Vector2(124, 141)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2c7h1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_pfunk")
+}],
+"loop": true,
+"name": &"Default",
+"speed": 5.0
+}]
+
+[node name="RigidBody2D" type="RigidBody2D" groups=["enemys"]]
+collision_layer = 5
+collision_mask = 5
+gravity_scale = 0.0
+max_contacts_reported = 20
+contact_monitor = true
+script = ExtResource("1_84xpc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_n05l3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1.93906, 2.19906)
+sprite_frames = SubResource("SpriteFrames_2c7h1")
+animation = &"Default"
+
+[node name="HPBar" parent="." instance=ExtResource("4_b7lck")]
+offset_left = -43.0
+offset_top = 82.0
+offset_right = 34.0
+offset_bottom = 111.0
+scale = Vector2(1.12405, 0.446387)
+metadata/_edit_use_anchors_ = true
+
+[node name="Turret" parent="." instance=ExtResource("6_5ujhp")]
+position = Vector2(51, 0)
+
+[node name="Turret2" parent="." instance=ExtResource("6_5ujhp")]
+position = Vector2(-51, 0)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

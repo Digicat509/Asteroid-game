@@ -1,0 +1,65 @@
+[gd_scene load_steps=14 format=3 uid="uid://de4jalxcb70ix"]
+
+[ext_resource type="Script" path="res://scripts/Game.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bo5462a3xaes" path="res://scenes/HUD.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://yifalrmsjv8a" path="res://scenes/player.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://cpxoiuih4ema5" path="res://scenes/asteroid.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://gd88hgyd8c0a" path="res://scenes/ship_enemy.tscn" id="4_lvd51"]
+[ext_resource type="PackedScene" uid="uid://drc6gin3hh1qm" path="res://scenes/ram_enemy.tscn" id="4_xh66w"]
+[ext_resource type="PackedScene" uid="uid://buuftkd8l2mih" path="res://scenes/laser.tscn" id="5"]
+[ext_resource type="Script" path="res://scripts/crystal.gd" id="6_8dcwj"]
+[ext_resource type="PackedScene" uid="uid://brwujh2js58bg" path="res://scenes/spawn_enemy.tscn" id="6_67def"]
+[ext_resource type="PackedScene" uid="uid://b2qtkd6jwdhd6" path="res://scenes/big_ship_enemy.tscn" id="6_o3t0s"]
+[ext_resource type="Texture2D" uid="uid://bg34d4keyi64a" path="res://graphics/red_crystal.png" id="7_sdux4"]
+[ext_resource type="PackedScene" uid="uid://been34to85e66" path="res://scenes/Background.tscn" id="10_ecpjg"]
+
+[sub_resource type="PackedScene" id="PackedScene_f78nm"]
+_bundled = {
+"conn_count": 1,
+"conns": PackedInt32Array(0, 0, 12, 11, 2, 0, 0),
+"editable_instances": [],
+"names": PackedStringArray("crystal", "script", "crystals", "Area2D", "RedCrystal", "scale", "texture", "Sprite2D", "CollisionPolygon2D", "position", "polygon", "_on_crystal_body_entered", "body_entered"),
+"node_count": 3,
+"node_paths": [],
+"nodes": PackedInt32Array(-1, -1, 3, 0, -1, 1, 1, 0, 1, 2, 0, 0, 7, 4, -1, 2, 5, 1, 6, 2, 0, 0, 0, 8, 8, -1, 2, 9, 3, 10, 4, 0),
+"variants": [ExtResource("6_8dcwj"), Vector2(0.063, 0.063), ExtResource("7_sdux4"), Vector2(-109, -389), PackedVector2Array(99, 391, 111, 405, 118, 397, 114, 382, 107, 377)],
+"version": 3
+}
+
+[node name="Game" type="Node"]
+script = ExtResource("1")
+laser_scene = ExtResource("5")
+asteroid_scene = ExtResource("4")
+basic_enemy_scene = ExtResource("4_xh66w")
+ship_enemy_scene = ExtResource("4_lvd51")
+big_ship_enemy_scene = ExtResource("6_o3t0s")
+spawn_enemy_scene = ExtResource("6_67def")
+crystal_scene = SubResource("PackedScene_f78nm")
+player_scene = ExtResource("3")
+
+[node name="Background" parent="." instance=ExtResource("10_ecpjg")]
+layer = -1
+
+[node name="HUD" parent="." instance=ExtResource("2")]
+layer = 2
+
+[node name="startPosition" type="Node2D" parent="."]
+position = Vector2(320, 320)
+
+[node name="asteroid_timer" type="Timer" parent="."]
+
+[node name="basic_enemy_timer" type="Timer" parent="."]
+wait_time = 8.0
+
+[node name="ship_enemy_timer" type="Timer" parent="."]
+wait_time = 6.0
+
+[node name="big_enemy_timer" type="Timer" parent="."]
+wait_time = 6.0
+
+[connection signal="game_over" from="HUD" to="." method="_on_HUD_game_over"]
+[connection signal="game_start" from="HUD" to="." method="_on_HUD_game_start"]
+[connection signal="timeout" from="asteroid_timer" to="." method="_on_asteroid_timer_timeout"]
+[connection signal="timeout" from="basic_enemy_timer" to="." method="_on_basic_enemy_timer_timeout"]
+[connection signal="timeout" from="ship_enemy_timer" to="." method="_on_ship_enemy_timer_timeout"]
+[connection signal="timeout" from="big_enemy_timer" to="." method="_on_big_enemy_timer_timeout"]
