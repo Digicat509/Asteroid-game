@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://bgcdyf277s836"]
+
+[ext_resource type="Script" path="res://scripts/snake_segment.gd" id="1_j84ld"]
+[ext_resource type="Texture2D" uid="uid://b4fxdx5fpge64" path="res://graphics/icon.png" id="1_k0fhl"]
+[ext_resource type="PackedScene" uid="uid://dtlssg4dl0he7" path="res://scenes/turret.tscn" id="2_30eis"]
+[ext_resource type="PackedScene" uid="uid://c474xtmrb3qpp" path="res://scenes/hp_bar.tscn" id="4_jsvjw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5yx3r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_k0fhl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_thnji"]
+size = Vector2(64, 64)
+
+[node name="RigidBody2D" type="RigidBody2D" groups=["enemys"]]
+script = ExtResource("1_j84ld")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5yx3r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_thnji")
+
+[node name="Turret" parent="." instance=ExtResource("2_30eis")]
+position = Vector2(0, -3)
+scale = Vector2(0.994, 1)
+
+[node name="HPBar" parent="." instance=ExtResource("4_jsvjw")]
+offset_left = 36.0
+offset_top = 17.0
+offset_right = 71.0
+offset_bottom = 22.0
+rotation = -1.57079
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

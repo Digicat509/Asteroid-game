@@ -17,3 +17,11 @@ res://scripts/turret.gd
 res://scripts/player.gd
 res://scripts/big_ship_enemy.gd
 res://scripts/Game.gd
+res://snake_segment.tscn
+res://snake_segment.gd
+res://snake_enemy.tscn
+res://snake_enemy.gd
+res://scenes/snake_enemy.tscn
+res://scripts/snake_enemy.gd
+res://scenes/snake_segment.tscn
+res://scripts/snake_segment.gd

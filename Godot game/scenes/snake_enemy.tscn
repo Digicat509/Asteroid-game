@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://cyk3j4wl8rx3j"]
+
+[ext_resource type="Script" path="res://scripts/snake_enemy.gd" id="1_a7iqa"]
+[ext_resource type="PackedScene" uid="uid://bgcdyf277s836" path="res://scenes/snake_segment.tscn" id="2_niyco"]
+[ext_resource type="Texture2D" uid="uid://b4fxdx5fpge64" path="res://graphics/icon.png" id="3_0soix"]
+[ext_resource type="PackedScene" uid="uid://c474xtmrb3qpp" path="res://scenes/hp_bar.tscn" id="4_2tkei"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_r60wj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_0soix")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ehdff"]
+size = Vector2(63, 62)
+
+[node name="RigidBody2D" type="RigidBody2D" groups=["enemys"]]
+collision_layer = 5
+collision_mask = 5
+script = ExtResource("1_a7iqa")
+segment_scene = ExtResource("2_niyco")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_r60wj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_ehdff")
+
+[node name="TurnTimer" type="Timer" parent="."]
+
+[node name="HPBar" parent="." instance=ExtResource("4_2tkei")]
+offset_left = -33.0
+offset_top = -56.0
+offset_right = 33.0
+offset_bottom = -41.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="TurnTimer" to="." method="_on_turn_timer_timeout"]

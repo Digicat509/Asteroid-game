@@ -23,7 +23,7 @@ func target(t):
 func _on_timer_timeout():
 	if player != null and global_position.distance_to(player.position) < range:
 		var laser = laser_scene.instantiate()
-		get_parent().get_parent().add_child(laser)
+		get_tree().get_root().add_child(laser)
 		laser.set_collision_layer_value(2, true)
 		laser.set_collision_mask_value(2, true)
 		laser.global_position = global_position

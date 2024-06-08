@@ -5,6 +5,7 @@ extends Node
 @export var basic_enemy_scene: PackedScene
 @export var ship_enemy_scene: PackedScene
 @export var big_ship_enemy_scene: PackedScene
+@export var snake_enemy_scene: PackedScene
 @export var spawn_enemy_scene: PackedScene
 @export var crystal_scene: PackedScene
 @export var player_scene: PackedScene
@@ -20,6 +21,7 @@ func new_game():
 	$basic_enemy_timer.start()
 	$ship_enemy_timer.start()
 	$big_enemy_timer.start()
+	$snake_enemy_timer.start()
 	$HUD.start_game()
 	playing = true
 	VariableStorage.set_crystals(0)
@@ -59,6 +61,7 @@ func _on_HUD_game_over():
 	$basic_enemy_timer.stop()
 	$ship_enemy_timer.stop()
 	$big_enemy_timer.stop()
+	$snake_enemy_timer.stop()
 
 
 func _on_basic_enemy_timer_timeout():
@@ -83,8 +86,18 @@ func _on_ship_enemy_timer_timeout():
 
 func _on_big_enemy_timer_timeout():
 	randomize()
-	$ship_enemy_timer.wait_time = randi_range(6, 12)
+	$big_enemy_timer.wait_time = randi_range(6, 12)
 	var enemy = big_ship_enemy_scene.instantiate()
+	add_child(enemy)
+	enemy.target(player)
+	var pos = player.position - $startPosition.position + Vector2((randf_range(-get_viewport().size.x/2, 0) if (randi_range(0, 1) == 0) else randf_range(get_viewport().size.x, 1.5*get_viewport().size.x)), (randf_range(-get_viewport().size.y/2, 0) if (randi_range(0, 1) == 0) else randf_range(get_viewport().size.y, 1.5*get_viewport().size.y)))
+	enemy.position = pos
+
+
+func _on_snake_enemy_timer_timeout():
+	randomize()
+	$snake_enemy_timer.wait_time = randi_range(10, 16)
+	var enemy = snake_enemy_scene.instantiate()
 	add_child(enemy)
 	enemy.target(player)
 	var pos = player.position - $startPosition.position + Vector2((randf_range(-get_viewport().size.x/2, 0) if (randi_range(0, 1) == 0) else randf_range(get_viewport().size.x, 1.5*get_viewport().size.x)), (randf_range(-get_viewport().size.y/2, 0) if (randi_range(0, 1) == 0) else randf_range(get_viewport().size.y, 1.5*get_viewport().size.y)))

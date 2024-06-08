@@ -12,6 +12,7 @@ var player
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
 	HP = MAX_HP
 	$HPBar.max_value = HP
 	$HPBar.value = HP

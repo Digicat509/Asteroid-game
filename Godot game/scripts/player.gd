@@ -96,7 +96,7 @@ func start(location):
 
 func _on_player_body_entered(body):
 	if(body.is_in_group("enemys")):
-		emit_signal("hit", body.damage)
+		emit_signal("hit", body.damage) 
 	if(body.is_in_group("asteroids")):
 		emit_signal("hit", body.damage)
 	if(body.is_in_group("lasers")):

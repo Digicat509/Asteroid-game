@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://de4jalxcb70ix"]
+[gd_scene load_steps=15 format=3 uid="uid://de4jalxcb70ix"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://bo5462a3xaes" path="res://scenes/HUD.tscn" id="2"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://b2qtkd6jwdhd6" path="res://scenes/big_ship_enemy.tscn" id="6_o3t0s"]
 [ext_resource type="Texture2D" uid="uid://bg34d4keyi64a" path="res://graphics/red_crystal.png" id="7_sdux4"]
 [ext_resource type="PackedScene" uid="uid://been34to85e66" path="res://scenes/Background.tscn" id="10_ecpjg"]
+[ext_resource type="PackedScene" uid="uid://cyk3j4wl8rx3j" path="res://scenes/snake_enemy.tscn" id="13_gyfij"]
 
 [sub_resource type="PackedScene" id="PackedScene_f78nm"]
 _bundled = {
@@ -33,6 +34,7 @@ asteroid_scene = ExtResource("4")
 basic_enemy_scene = ExtResource("4_xh66w")
 ship_enemy_scene = ExtResource("4_lvd51")
 big_ship_enemy_scene = ExtResource("6_o3t0s")
+snake_enemy_scene = ExtResource("13_gyfij")
 spawn_enemy_scene = ExtResource("6_67def")
 crystal_scene = SubResource("PackedScene_f78nm")
 player_scene = ExtResource("3")
@@ -57,9 +59,13 @@ wait_time = 6.0
 [node name="big_enemy_timer" type="Timer" parent="."]
 wait_time = 6.0
 
+[node name="snake_enemy_timer" type="Timer" parent="."]
+wait_time = 10.0
+
 [connection signal="game_over" from="HUD" to="." method="_on_HUD_game_over"]
 [connection signal="game_start" from="HUD" to="." method="_on_HUD_game_start"]
 [connection signal="timeout" from="asteroid_timer" to="." method="_on_asteroid_timer_timeout"]
 [connection signal="timeout" from="basic_enemy_timer" to="." method="_on_basic_enemy_timer_timeout"]
 [connection signal="timeout" from="ship_enemy_timer" to="." method="_on_ship_enemy_timer_timeout"]
 [connection signal="timeout" from="big_enemy_timer" to="." method="_on_big_enemy_timer_timeout"]
+[connection signal="timeout" from="snake_enemy_timer" to="." method="_on_snake_enemy_timer_timeout"]

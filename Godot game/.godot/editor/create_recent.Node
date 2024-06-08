@@ -1,7 +1,9 @@
 Timer
+CollisionShape2D
+AnimatedSprite2D
+RigidBody2D
 Sprite2D
 Area2D
-RigidBody2D
 TextEdit
 Button
 CanvasLayer
@@ -10,7 +12,5 @@ ColorRect
 GPUParticles2D
 CharacterBody2D
 SubViewport
-AnimatedSprite2D
 Node2D
 Camera2D
-CollisionShape2D

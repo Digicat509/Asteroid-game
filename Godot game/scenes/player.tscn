@@ -68,6 +68,7 @@ inertia = 1000.0
 center_of_mass_mode = 1
 physics_material_override = SubResource("2")
 gravity_scale = 0.0
+continuous_cd = 2
 max_contacts_reported = 20
 contact_monitor = true
 script = ExtResource("1")
