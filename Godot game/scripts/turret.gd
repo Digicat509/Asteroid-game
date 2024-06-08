@@ -12,17 +12,19 @@ func _ready():
 	rotation = randf_range(0, 2*PI)
 
 func _process(delta):
-	rotation = player.global_position.angle_to_point(global_position)
+	if player != null:
+		global_rotation = player.global_position.angle_to_point(global_position)
+		global_rotation -= PI/2
 	pass
 
 func target(t):
 	player = t
 
 func _on_timer_timeout():
-	if global_position.distance_to(player.position) < range:
+	if player != null and global_position.distance_to(player.position) < range:
 		var laser = laser_scene.instantiate()
-		add_child(laser)
+		get_parent().get_parent().add_child(laser)
 		laser.set_collision_layer_value(2, true)
 		laser.set_collision_mask_value(2, true)
 		laser.global_position = global_position
-		laser.rotation = rotation
+		laser.rotation = global_rotation

@@ -47,26 +47,21 @@ func _physics_process(delta):
 			linear_speed -= linear_acceleration
 			linear_velocity = linear_velocity.normalized()*linear_speed
 		$AnimatedSprite2D.play("still")
-	if not VariableStorage.physics and Input.is_action_pressed("turn_left"):
+	if Input.is_action_pressed("turn_left") and Input.is_action_pressed("turn_right"):
+		apply_central_force(Vector2(0, -VariableStorage.get_speed()).rotated(rotation))
+		$RightParticles.emitting = true
+		$LeftParticles.emitting = true
+		$AnimatedSprite2D.play("forward")
+	elif not VariableStorage.physics and Input.is_action_pressed("turn_left"):
 		angular_velocity = (-PI*2)/3
 		$RightParticles.emitting = true
 		$LeftParticles.emitting = false
 		$AnimatedSprite2D.play("turnRight")
-	if not VariableStorage.physics and Input.is_action_pressed("turn_right"):
+	elif not VariableStorage.physics and Input.is_action_pressed("turn_right"):
 		angular_velocity = (PI*2)/3
 		$RightParticles.emitting = false
 		$LeftParticles.emitting = true
 		$AnimatedSprite2D.play("turnLeft")
-	if Input.is_action_pressed("accelerate"):
-		apply_central_force(Vector2(0, -VariableStorage.get_speed()).rotated(rotation))
-		$RightParticles.emitting = true
-		$LeftParticles.emitting = true
-		$AnimatedSprite2D.play("forward")
-	elif Input.is_action_pressed("turn_left") and Input.is_action_pressed("turn_right"):
-		apply_central_force(Vector2(0, -VariableStorage.get_speed()).rotated(rotation))
-		$RightParticles.emitting = true
-		$LeftParticles.emitting = true
-		$AnimatedSprite2D.play("forward")
 	elif Input.is_action_pressed("turn_right"):
 		if(VariableStorage.physics):
 			apply_force(Vector2(0, -150).rotated(rotation), Vector2(-22, 12).rotated(rotation))
@@ -79,6 +74,11 @@ func _physics_process(delta):
 		$RightParticles.emitting = true
 		$LeftParticles.emitting = false
 		$AnimatedSprite2D.play("turnRight")
+	if Input.is_action_pressed("accelerate"):
+		apply_central_force(Vector2(0, -VariableStorage.get_speed()).rotated(rotation))
+		$RightParticles.emitting = true
+		$LeftParticles.emitting = true
+		$AnimatedSprite2D.play("forward")
 	if(abs(linear_speed) > MAX_LINEAR_SPEED):
 		linear_velocity = linear_velocity.normalized()*500
 

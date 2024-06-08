@@ -45,9 +45,11 @@ scale = Vector2(1.12405, 0.446387)
 metadata/_edit_use_anchors_ = true
 
 [node name="Turret" parent="." instance=ExtResource("6_5ujhp")]
-position = Vector2(51, 0)
+position = Vector2(50, 0)
+scale = Vector2(1, 1.005)
 
 [node name="Turret2" parent="." instance=ExtResource("6_5ujhp")]
-position = Vector2(-51, 0)
+position = Vector2(-50, 0)
+scale = Vector2(1, 1.01)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
